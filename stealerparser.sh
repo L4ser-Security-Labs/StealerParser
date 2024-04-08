@@ -31,7 +31,7 @@ function logo()
 #---Author:  L4sec              --#
 #---Twitter: @l4sec             --#
 #---Type:    Log Parser         --#
-#---Version: 1.0.0              --#
+#---Version: 0.0.1              --#
 ###################################" && echo "$RESET\n"
 	main_menu
 }
@@ -72,7 +72,7 @@ function opt_list()
 {	notification_b "Welcome to StealerParser"
 	printf "
 1) Help	                 2) List and Parse
-3) Update                4) Quit\n"
+3) Update Tool           4) Quit\n"
 
 	main_menu
 }
@@ -99,17 +99,17 @@ The 'Quit' allows you to exit this tool.
 
 
 ## Tool Update Function
-function StealerParseUpdate() 
+function StealerParseUpdater() 
 {	if [[ -d "UpdateTool" ]]; then
 		warning "Looking for new updates..."
 		clear
 	else
-		notification "Contacting StealerParse..."
+		notification "Contacting StealerParser..."
 		sleep 1
-		# git clone https://github.com/NullArray/QuickScan.git
-		notification "Updating StealerParse..."
+		git clone https://github.com/L4ser-Security-Labs/StealerParser.git
+		notification "Updating StealerParser..."
 		sleep 1
-		notification "StealerParse has successfully updated. Quit and Relaunch utility."
+		notification "StealerParser has successfully updated. Quit and Relaunch utility."
         main_menu
 	fi
 }
@@ -810,7 +810,7 @@ function list()
 function UpdateStealerParse() 
 {	printf "\n\n"
 	notification_b "Installing all available tools plus dependencies."
-        StealerParseUpdate
+        StealerParseUpdater
 	}
 
 ## Main Menu Function
@@ -829,7 +829,7 @@ function main_menu()
 				printf "%b \n"
 				;;
 			"Update Tool")
-				install_all
+				StealerParseUpdate
 				printf "%b \n"
 				;;
 			"Quit")
