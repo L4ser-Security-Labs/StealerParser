@@ -106,7 +106,7 @@ function StealerParseUpdater()
 	else
 		notification "Contacting StealerParser..."
 		sleep 1
-		git fetch
+		git pull
 		notification "Updating StealerParser..."
 		sleep 1
 		notification "StealerParser has successfully updated. Quit and Relaunch utility."
