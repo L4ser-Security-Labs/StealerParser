@@ -829,7 +829,7 @@ function main_menu()
 				printf "%b \n"
 				;;
 			"Update Tool")
-				StealerParseUpdate
+				StealerParseUpdater
 				printf "%b \n"
 				;;
 			"Quit")
