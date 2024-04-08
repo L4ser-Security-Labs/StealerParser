@@ -1,1 +1,1 @@
-Easily find and parse credentials from stealer logs
+Interractive tool to easily find and parse credentials from stealer logs.
