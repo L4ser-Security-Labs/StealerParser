@@ -9,7 +9,7 @@ GREEN=$ESC"32;01m"
 
 # Warning
 function warning() 
-{	echo -e "\n$RED [!] $1 $RESET\n"
+{	echo "\n$RED [!] $1 $RESET\n"
 }
 
 # Green notification
