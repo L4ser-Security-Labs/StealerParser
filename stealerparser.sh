@@ -43,7 +43,7 @@ function tools()
 {	notification_b "Available websites, select a number to search for credentials"
 	printf "\
 +-------------------------------+
-| Website               	|
+| WEBSITES              	|
 +-------------------------------+
 |1. Facebook			|
 |2. Twitter/X			|
@@ -127,17 +127,19 @@ function ParseFacebook()
 		for folder in "$main_folder"/*; do
 			if [ -d "$folder" ]; then
 				echo "Searching in folder: $folder"
-				for file in "$folder"/*; do
-					if [ -f "$file" ]; then
-						if grep -q "$search_string" "$file"; then
-							((match_count++))
-							echo "Match found in file: $file" >> "$output_file"
-							grep -A 2 "$search_string" "$file" >> "$output_file"
-							echo >> "$output_file"
-							notification "Matches found: $match_count\r"
-						fi
+				if [ -f "$folder/passwords.txt" ]; then
+					if grep -q "$search_string" "$folder/passwords.txt"; then
+						echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+						grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+						echo >> "$output_file"
+						((match_count++))
+						notification "Match found: $match_count\r"
+					else
+						notification_b "No match found"
 					fi
-				done
+				else
+					warning "passwords.txt not found in folder: $folder. Moving to next folder."
+				fi
 			fi
 		done
     notification "\n $match_count results saved in: $output_file"
@@ -146,27 +148,29 @@ function ParseFacebook()
 ## Twitter/X Parser Function
 function ParseTwitterX() 
 {	read -p "Enter the full path to the stealer folder: " main_folder
-    	local search_string="twitter.com"
-		local output_file="$search_string.txt"
-		local match_count=0
+	local search_string="twitter.com"
+	local output_file="$search_string.txt"
+	local match_count=0
 
-		notification "Searching for X credentials..."
-		for folder in "$main_folder"/*; do
-			if [ -d "$folder" ]; then
-				echo "Searching in folder: $folder"
-				for file in "$folder"/*; do
-					if [ -f "$file" ]; then
-						if grep -q "$search_string" "$file"; then
-							((match_count++))
-							echo "Match found in file: $file" >> "$output_file"
-							grep -A 2 "$search_string" "$file" >> "$output_file"
-							echo >> "$output_file"
-							notification "Matches found: $match_count\r"
-						fi
-					fi
-				done
+	notification "Searching for X credentials..."
+	for folder in "$main_folder"/*; do
+		if [ -d "$folder" ]; then
+			echo "Searching in folder: $folder"
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
+				fi
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
 			fi
-		done
+		fi
+	done
     notification "\n $match_count results saved in: $output_file"
 }
 
@@ -181,17 +185,19 @@ function ParseInstagram()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
     notification "\n $match_count results saved in: $output_file"
@@ -206,21 +212,23 @@ function ParseLinkedIn()
 
 	notification "Searching for LinkedIn credentials..."
 	for folder in "$main_folder"/*; do
-		if [ -d "$folder" ]; then
-			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
-				fi
-			done
-		fi
-	done
+        if [ -d "$folder" ]; then
+            echo "Searching in folder: $folder"
+            if [ -f "$folder/passwords.txt" ]; then
+                if grep -q "$search_string" "$folder/passwords.txt"; then
+                    echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+                    grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+                    echo >> "$output_file"
+                    ((match_count++))
+                    notification "Match found: $match_count\r"
+                else
+                    notification_b "No match found"
+                fi
+            else
+                warning "passwords.txt not found in folder: $folder. Moving to next folder."
+            fi
+        fi
+    done
     notification "\n $match_count results saved in: $output_file"
 }
 
@@ -235,17 +243,19 @@ function ParseSnapchat()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
     notification "\n $match_count results saved in: $output_file"
@@ -262,17 +272,19 @@ function ParseOutlook()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
     notification "\n $match_count results saved in: $output_file"
@@ -289,17 +301,19 @@ function ParseGithub()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
     notification "\n $match_count results saved in: $output_file"
@@ -316,20 +330,22 @@ function ParseGmail()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Yahoo Mail Parser Function
@@ -343,20 +359,22 @@ function ParseYahooMail()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Tiktok Parser Function
@@ -370,20 +388,22 @@ function ParseTiktok()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Discord Parser Function
@@ -397,20 +417,22 @@ function ParseDiscord()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Netflix Parser Function
@@ -424,20 +446,22 @@ function ParseNetflix()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Roblox Parser Function
@@ -451,20 +475,22 @@ function ParseRoblox()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Telegram Parser Function
@@ -478,20 +504,22 @@ function ParseTelegram()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Spotify Parser Function
@@ -505,20 +533,22 @@ function ParseSpotify()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Apple ICloud Parser Function
@@ -532,20 +562,22 @@ function ParseICloud()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## OpenAI Parser Function
@@ -559,20 +591,22 @@ function ParseOpenAI()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Amazon Parser Function
@@ -586,20 +620,22 @@ function ParseAmazon()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## AliExpress Parser Function
@@ -613,20 +649,22 @@ function ParseAliExpress()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## PayPal Parser Function
@@ -640,20 +678,22 @@ function ParsePayPal()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-	notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 ## Other Domains Parser Function
@@ -667,21 +707,22 @@ function ParseOthers()
 	for folder in "$main_folder"/*; do
 		if [ -d "$folder" ]; then
 			echo "Searching in folder: $folder"
-			for file in "$folder"/*; do
-				if [ -f "$file" ]; then
-					if grep -q "$search_string" "$file"; then
-						((match_count++))
-						echo "Match found in file: $file" >> "$output_file"
-						grep -A 2 "$search_string" "$file" >> "$output_file"
-						echo >> "$output_file"
-						notification "Matches found: $match_count\r"
-					fi
+			if [ -f "$folder/passwords.txt" ]; then
+				if grep -q "$search_string" "$folder/passwords.txt"; then
+					echo "Match found in file: $folder/passwords.txt" >> "$output_file"
+					grep -A 2 "$search_string" "$folder/passwords.txt" >> "$output_file"
+					echo >> "$output_file"
+					((match_count++))
+					notification "Match found: $match_count\r"
+				else
+					notification_b "No match found"
 				fi
-			done
+			else
+				warning "passwords.txt not found in folder: $folder. Moving to next folder."
+			fi
 		fi
 	done
-
-notification "\n $match_count results saved in: $output_file"
+    notification "\n $match_count results saved in: $output_file"
 }
 
 

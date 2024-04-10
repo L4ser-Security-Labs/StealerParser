@@ -6,7 +6,7 @@ Interactive tool to easily find and parse credentials from stealer logs.
 
 ## TODO
 
-- [ ] Reduce noise, filter invalid or empty credentials
+- [x] Reduce noise, filter invalid or empty credentials
 
 - [ ] Credential replay
 
